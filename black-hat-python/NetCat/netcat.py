@@ -39,39 +39,44 @@ class NetCat:
 
   def send(self):
     """Client mode: connect to target, optionally send initial buffer, then receive/send in a loop."""
-    self.socket.connect((self.args.target, self.args.port))
+    print(f'[*] Connecting to {self.args.target}:{self.args.port}...')
+    try:
+      self.socket.connect((self.args.target, self.args.port))
+      print(f'[*] Connected to {self.args.target}:{self.args.port}')
+    except Exception as e:
+      print(f'[!] Connection failed: {e}')
+      sys.exit(1)
+    
     if self.buffer:
       self.socket.send(self.buffer)
+      print(f'[*] Sent {len(self.buffer)} bytes')
 
     try:
       while True:
-        recv_len = 1
-        resp = ""
-
-        # Keep reading until we get a full response (or less than 4096 bytes)
-        while recv_len:
-          data = self.socket.recv(4096)
-          recv_len = len(data)
-          resp += data.decode()
-          if recv_len < 4096:
-            break
-          if resp:
-            print(resp)
-            buffer = "> "
-            buffer += "\n"
-            self.socket.send(buffer.encode())
+        # Receive data from server
+        data = self.socket.recv(4096)
+        if not data:
+          print('\n[*] Connection closed by server')
+          break
+        print(data.decode(), end='', flush=True)
     except KeyboardInterrupt:
-      print("User Terminated.")
+      print("\nUser Terminated.")
+      self.socket.close()
+      sys.exit()
+    except Exception as e:
+      print(f"\nConnection error: {e}")
       self.socket.close()
       sys.exit()
 
   def listen(self):
-    """Server mode: bind to target:port, accept connections, and handle each in a thread."""
-    self.socket.bind((self.args.target, self.args.port))
+    """Server mode: bind to 0.0.0.0:port (all interfaces), accept connections, and handle each in a thread."""
+    self.socket.bind(('0.0.0.0', self.args.port))
     self.socket.listen(5)
+    print(f'[*] Listening on 0.0.0.0:{self.args.port}')
 
     while True:
-      client_socket, _ = self.socket.accept()
+      client_socket, addr = self.socket.accept()
+      print(f'[*] Accepted connection from {addr[0]}:{addr[1]}')
       # Handle each client in a separate thread so we can serve multiple connections
       client_thread = threading.Thread(
         target=self.handle,
@@ -84,36 +89,62 @@ class NetCat:
     Handle one client connection: either execute a command, receive an upload,
     or run an interactive command shell. Expects execute() to be in scope (e.g. from netcat_cmd).
     """
-    if self.args.execute:
-      # Run a single command and send its output back to the client
-      output = execute(self.args.execute)
-      client_socket.send(output.encode())
-    elif self.args.upload:
-      # Receive raw bytes until connection closes, then save to the specified file
-      file_buffer = b''
-      while True:
-        data = client_socket.recv(4096)
-        if data:
-          file_buffer += data
+    try:
+      if self.args.execute:
+        # Run a single command and send its output back to the client
+        print(f'[*] Executing command: {self.args.execute}')
+        output = execute(self.args.execute)
+        if output:
+          client_socket.send(output.encode())
+          print(f'[*] Sent {len(output)} bytes to client')
         else:
-          break
-      with open(self.args.upload, 'wb') as f:
-        f.write(file_buffer)
-      message = f'Saved file {self.args.upload}'
-      client_socket.send(message.encode())
-    elif self.args.command:
-      # Interactive shell: prompt BHP: #> and run each line the client sends
-      cmd_buff = b''
-      while True:
-        try:
-          client_socket.send(b'BHP: #> ')
-          while '\n' not in cmd_buff.decode():
-            # Read more input (implementation would need to recv into cmd_buff here)
-            response = execute(cmd_buff.decode())
-            if response:
-              client_socket.send(response.encode())
+          print('[*] Command produced no output')
+        client_socket.close()
+        print('[*] Connection closed')
+      elif self.args.upload:
+        # Receive raw bytes until connection closes, then save to the specified file
+        file_buffer = b''
+        while True:
+          data = client_socket.recv(4096)
+          if data:
+            file_buffer += data
+          else:
+            break
+        with open(self.args.upload, 'wb') as f:
+          f.write(file_buffer)
+        message = f'Saved file {self.args.upload}'
+        client_socket.send(message.encode())
+        client_socket.close()
+      elif self.args.command:
+        # Interactive shell: prompt BHP: #> and run each line the client sends
+        while True:
+          try:
+            client_socket.send(b'BHP: #> ')
             cmd_buff = b''
-        except Exception as e:
-          print(f'server killed {e}')
-          self.socket.close()
-          sys.exit()
+            while True:
+              data = client_socket.recv(1)
+              if not data:
+                raise Exception("Connection closed")
+              cmd_buff += data
+              if data == b'\n':
+                break
+            cmd = cmd_buff.decode().strip()
+            if cmd:
+              response = execute(cmd)
+              if response:
+                client_socket.send(response.encode())
+          except Exception as e:
+            print(f'server killed {e}')
+            client_socket.close()
+            break
+      else:
+        # No specific mode, just echo back what we receive
+        while True:
+          data = client_socket.recv(4096)
+          if not data:
+            break
+          client_socket.send(data)
+        client_socket.close()
+    except Exception as e:
+      print(f'Error handling client: {e}')
+      client_socket.close()
