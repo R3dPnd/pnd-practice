@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS/HTML Practice</title>
+    <!--
+    ============================================================
+    HTML/CSS EXERCISE
+
+    Build a simple product card layout that looks like this:
+
+    +------------------------------------------+
+    |  [IMAGE PLACEHOLDER — 100% width, 200px] |
+    +------------------------------------------+
+    |  Product Name                    $29.99   |
+    |  Short description text here             |
+    |                                          |
+    |  ★★★★☆  (4/5 stars)                      |
+    |                                          |
+    |  [  ADD TO CART  ]  [  SAVE  ]           |
+    +------------------------------------------+
+
+    Requirements:
+    1. Card has a white background, rounded corners, subtle box shadow
+    2. Image fills the top of the card, no overflow
+    3. Price is right-aligned on the same line as the product name
+    4. Name and price are on one flexbox row with space-between
+    5. Buttons are side by side at the bottom; ADD TO CART is full blue, SAVE is outlined
+    6. Card should be max 360px wide, centered on the page
+    7. Page background is light gray (#f0f2f5)
+    8. On hover, the card should lift slightly (transform: translateY + box-shadow change)
+
+    CSS topics tested:
+      - Flexbox (row layout, space-between, align-items)
+      - Box model (padding, border, border-radius)
+      - box-shadow
+      - CSS transitions
+      - overflow: hidden (image clipping)
+      - Button styling (background, border, cursor, hover states)
+
+    Write your CSS in the <style> block below.
+    Check solution.html when done.
+    ============================================================
+    -->
+    <style>
+        /* TODO: write your CSS here */
+
+        /* Base page styles */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            /* TODO: set background color, use flexbox to center the card */
+        }
+
+        /* Card container */
+        .card {
+            /* TODO: white bg, rounded corners, shadow, max-width, overflow hidden */
+        }
+
+        /* Card hover effect */
+        .card:hover {
+            /* TODO: lift the card up with transform, deepen the shadow */
+        }
+
+        /* Product image */
+        .card-image {
+            /* TODO: full width, 200px tall, object-fit cover */
+        }
+
+        /* Card body padding */
+        .card-body {
+            /* TODO: padding */
+        }
+
+        /* Name + price row */
+        .card-header {
+            /* TODO: flexbox, space-between, align center, margin bottom */
+        }
+
+        .product-name {
+            /* TODO: font-size, font-weight */
+        }
+
+        .product-price {
+            /* TODO: color, font-weight */
+        }
+
+        /* Description */
+        .product-description {
+            /* TODO: color, font-size, margin */
+        }
+
+        /* Stars */
+        .product-rating {
+            /* TODO: color, margin */
+        }
+
+        /* Button row */
+        .card-actions {
+            /* TODO: flexbox, gap between buttons, margin-top */
+        }
+
+        /* Shared button styles */
+        .btn {
+            /* TODO: padding, border-radius, cursor, font-size, transition */
+        }
+
+        /* Primary: filled blue */
+        .btn-primary {
+            /* TODO: blue background, white text, no border */
+        }
+
+        .btn-primary:hover {
+            /* TODO: darker blue */
+        }
+
+        /* Secondary: outlined */
+        .btn-secondary {
+            /* TODO: transparent background, blue border and text */
+        }
+
+        .btn-secondary:hover {
+            /* TODO: light blue background fill */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <img
+            class="card-image"
+            src="https://via.placeholder.com/360x200/cccccc/888888?text=Product+Image"
+            alt="Product"
+        >
+        <div class="card-body">
+            <div class="card-header">
+                <span class="product-name">Wireless Headphones</span>
+                <span class="product-price">$29.99</span>
+            </div>
+            <p class="product-description">
+                Premium sound quality with 20-hour battery life and noise cancellation.
+            </p>
+            <div class="product-rating">★★★★☆ (4/5)</div>
+            <div class="card-actions">
+                <button class="btn btn-primary">Add to Cart</button>
+                <button class="btn btn-secondary">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery loaded for JS exercises -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="../javascript/exercises.js"></script>
+</body>
+</html>

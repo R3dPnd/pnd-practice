@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS/HTML Solution</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: #f0f2f5;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        /* Card — overflow:hidden clips the image to the rounded corners */
+        .card {
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+            max-width: 360px;
+            width: 100%;
+            overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        /* Lift effect on hover */
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+        }
+
+        /* Image fills full card width, fixed height, no distortion */
+        .card-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .card-body {
+            padding: 16px;
+        }
+
+        /* Name left, price right — classic flexbox space-between */
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .product-name {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .product-price {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #0066cc;
+        }
+
+        .product-description {
+            font-size: 0.875rem;
+            color: #666;
+            line-height: 1.4;
+            margin-bottom: 12px;
+        }
+
+        .product-rating {
+            font-size: 0.875rem;
+            color: #f5a623;
+            margin-bottom: 16px;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 10px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: background-color 0.15s ease, color 0.15s ease;
+        }
+
+        .btn-primary {
+            background-color: #0066cc;
+            color: #ffffff;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #0052a3;
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: #0066cc;
+            border: 2px solid #0066cc;
+        }
+
+        .btn-secondary:hover {
+            background-color: #e6f0ff;
+        }
+
+        /* ----------------------------------------------------------------
+           NOTES FOR INTERVIEW:
+
+           Box model review:
+             content → padding → border → margin (inside out)
+             box-sizing: border-box makes width include padding+border (preferred)
+
+           Specificity order (high to low):
+             inline styles > #id > .class / [attr] / :pseudo-class > element
+
+           display: flex key properties used here:
+             justify-content: space-between — pushes items to opposite ends
+             align-items: center — vertically centers items on cross axis
+             gap: 8px — spacing between flex children (no margin hacks needed)
+             flex: 1 on buttons — each button takes equal share of available width
+
+           transition shorthand:
+             transition: property duration timing-function;
+             'ease' = slow start, fast middle, slow end (most natural feel)
+
+           object-fit: cover — scales image to fill container, crops excess
+           overflow: hidden on .card — clips children (image) to border-radius
+        ---------------------------------------------------------------- -->
+    </style>
+</head>
+<body>
+    <div class="card">
+        <img
+            class="card-image"
+            src="https://via.placeholder.com/360x200/cccccc/888888?text=Product+Image"
+            alt="Product"
+        >
+        <div class="card-body">
+            <div class="card-header">
+                <span class="product-name">Wireless Headphones</span>
+                <span class="product-price">$29.99</span>
+            </div>
+            <p class="product-description">
+                Premium sound quality with 20-hour battery life and noise cancellation.
+            </p>
+            <div class="product-rating">★★★★☆ (4/5)</div>
+            <div class="card-actions">
+                <button class="btn btn-primary">Add to Cart</button>
+                <button class="btn btn-secondary">Save</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
