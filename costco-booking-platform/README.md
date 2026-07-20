@@ -35,11 +35,7 @@ Each phase is deliberately small. The point is repetition on the patterns Costco
 # https://start.spring.io → Group: com.costco.travel, Artifact: traveldesk
 # Dependencies: Spring Web, Spring Data JPA, H2, Thymeleaf (swap for JSP in Phase 4)
 
-mvn archetype:generate \
-  -DgroupId=com.costco.travel \
-  -DartifactId=traveldesk \
-  -DarchetypeArtifactId=maven-archetype-quickstart \
-  -DinteractiveMode=false
+mvn archetype:generate -DgroupId=com.costco.travel -DartifactId=traveldesk -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
 ```
 
 Then open `pom.xml` and add the Spring Boot parent + starter dependencies (shown in Phase 1).

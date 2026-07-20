@@ -10,7 +10,9 @@
 -- ============================================================
 
 -- YOUR ANSWER:
-
+SELECT e.name AS employee_name, d.dept_name
+FROM employees e
+LEFT JOIN departments d ON e.dept_id = d.dept_id;
 
 -- ============================================================
 -- Query 2 — Aggregation + HAVING
@@ -21,7 +23,12 @@
 -- ============================================================
 
 -- YOUR ANSWER:
-
+SELECT d.dept_name, AVG(e.salary) AS avg_salary
+FROM employees e
+JOIN departments d ON e.dept_id = d.id
+GROUP BY d.dept_name
+HAVING AVG(e.salary) > 60000
+ORDER BY avg_salary DESC;
 
 -- ============================================================
 -- Query 3 — Correlated Subquery
@@ -31,6 +38,11 @@
 -- ============================================================
 
 -- YOUR ANSWER:
+SELECT e.name as employee_name, e.salary as salary, e.dept_id as dept_id
+FROM employees e
+WHERE e.salary > (SELECT AVG(e2.salary)
+    FROM employees e2
+    WHERE e2.dept_id = e.dept_id);  
 
 
 -- ============================================================
@@ -38,8 +50,10 @@
 -- List each employee's name alongside their manager's name.
 -- Employees with no manager should still appear (manager name = NULL).
 -- ============================================================
-
 -- YOUR ANSWER:
+SELECT e.name AS employee_name, m.name AS manager_name
+FROM employees e
+LEFT JOIN employees m ON e.manager_id = m.id;
 
 
 -- ============================================================
