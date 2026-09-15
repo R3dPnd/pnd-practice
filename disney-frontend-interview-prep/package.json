@@ -1,0 +1,12 @@
+{
+  "name": "disney-frontend-interview-prep",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test challenges",
+    "test:solutions": "PRACTICE=0 node --test challenges"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
