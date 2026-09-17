@@ -26,7 +26,7 @@ def trap(height: List[int]) -> int:
 
     print(f"{max_l}:{max_r}:{height}")
 
-    for h in range(1, n-1):
+    for h in range(0, -1, n-1):
         curr = height[h]
         min_wall = min(max_l[h], max_r[h])
         if curr < min_wall:

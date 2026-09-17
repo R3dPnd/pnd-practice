@@ -40,35 +40,36 @@ external customers — that's a legitimate customer-impact story in a Security c
 
 ### Situation
 
-At Boeing, a customer had placed an order for access to a specific set of
-schematics. A salesperson had entered the order incorrectly, and the access that
-was actually provisioned didn't match what the customer had purchased — they were
-either missing documents they were entitled to or seeing access that didn't belong
-to their order.
+At Microsoft, my team was integrating Copilot into the intake form release managers
+use to submit releases. The PM raised concerns about the proposed changes — large
+edits to the form, including moving questions around, that risked confusing release
+managers who already knew the existing flow by heart.
 
 ### Task
 
-I needed to correct the customer's access so it matched exactly what they had
-ordered — no less than they'd paid for, and no extra/unnecessary document access
-left over from the incorrect entry.
+I needed to design the Copilot integration in a way that actually addressed the
+PM's concern: any change to the form had to earn its place by clearly benefiting
+release managers, weighed against the real cost of disrupting a flow they already
+relied on — not just add the feature and hope the disruption was acceptable.
 
 ### Action
 
-I wrote a SQL script to directly revert the bad order entry and re-grant access
-based on the correct schematics the customer had actually purchased, then cleaned
-up the leftover/unnecessary access records the mistaken order had created. I chose
-to fix the underlying data directly rather than just patching the customer's
-account from the front end, because a surface-level fix would have left stale
-incorrect access records in the backend that could cause the same confusion again.
+I worked extra hours to turn this around quickly and built a functional mockup that
+made the Copilot call asynchronous instead of blocking the release manager's flow.
+Rather than reordering or inserting new required questions into the existing form,
+I designed it so Copilot's involvement would either actively accelerate the release
+manager's work or simply stay out of the way — it was never allowed to add friction,
+waiting, or confusion to the path they already knew.
 
 ### Result
 
-The customer received the correct schematic access without further delay, and the
-incorrect access created by the original order was fully cleaned up rather than
-lingering as a discrepancy.
+The PM was grateful for the approach and it was adopted as the direction for the
+integration — the async, non-blocking design became the pattern we shipped, instead
+of the more disruptive version originally proposed.
 
 ### Learning
 
-I now treat a "wrong access granted" ticket as a data-integrity issue, not just a
-one-off account fix — because correcting only what the customer sees on their end
-can leave incorrect grants behind that surface again later.
+I now weigh any change to an existing user flow against the disruption it causes to
+users who already know that flow, not just the benefit the change is meant to add —
+because a feature that's valuable in isolation can still be a net loss if it
+confuses or slows down people who relied on the flow staying familiar.
