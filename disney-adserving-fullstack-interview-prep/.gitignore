@@ -1,0 +1,4 @@
+# node_modules isn't ignored repo-wide (see ../.gitignore) — scope it here so the
+# live-build-sandbox's install doesn't get committed. target/ and dist/ are already
+# covered by the repo-wide .gitignore.
+node_modules/
