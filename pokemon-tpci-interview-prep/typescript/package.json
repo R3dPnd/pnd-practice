@@ -1,0 +1,9 @@
+{
+  "name": "tpci-typescript-practice",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "test:solution": "PRACTICE=0 node --test"
+  }
+}
